@@ -1,0 +1,29 @@
+{
+  "database": "items.db",
+  "version": 3,
+  "encrypted": false,
+  "mode": "full",
+  "tables": [
+    {
+      "name": "items",
+      "schema": [
+        {
+          "column": "id",
+          "value": "INTEGER PRIMARY KEY AUTOINCREMENT"
+        },
+        {
+          "column": "name",
+          "value": "TEXT NOT NULL"
+        },
+        {
+          "column": "address",
+          "value": "TEXT NOT NULL"
+        },
+        {
+          "column": "status",
+          "value": "TEXT CHECK(status IN ('entregue', 'pendente')) DEFAULT 'pendente'"
+        }
+      ]
+    }
+  ]
+}

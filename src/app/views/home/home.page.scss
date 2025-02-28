@@ -1,0 +1,9 @@
+.title {
+  text-align: center;
+}
+
+:host {
+  >ion-list {
+    height: 100vh;
+  }
+}
