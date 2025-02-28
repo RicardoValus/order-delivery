@@ -66,18 +66,10 @@ export class EditPage implements OnInit {
     this.sqlite.update(updatedItem.id, updatedItem.name, updatedItem.address, updatedItem.status)
       .then((changes) => {
         console.log("atualizado: ", changes);
-        this.read();
         this.router.navigate(['/']);
       })
       .catch(err => {
         console.error("erro ao atualizar: ", err);
       });
   }
-
-  read() {
-    this.sqlite.read().then((items: Item[]) => {
-      this.items = items;
-    }).catch(err => console.error("erro ao ler:", err));
-  }
-
 }

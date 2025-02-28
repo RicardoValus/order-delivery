@@ -12,7 +12,6 @@ export class SqliteService {
 
   public dbReady: BehaviorSubject<boolean>
   public isWeb: boolean
-  public isIOS: boolean
   public dbName: string
 
 
@@ -21,7 +20,6 @@ export class SqliteService {
   ) {
     this.dbReady = new BehaviorSubject(false);
     this.isWeb = false;
-    this.isIOS = false;
     this.dbName = '';
   }
 
@@ -40,8 +38,6 @@ export class SqliteService {
       this.isWeb = true;
       await sqlite.initWebStore();
 
-    } else if (info.platform == 'ios') {
-      this.isIOS = true;
     }
 
     this.setupDatabase();

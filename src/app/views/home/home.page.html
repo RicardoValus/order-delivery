@@ -23,15 +23,16 @@
 <ion-list>
   <ion-item *ngFor="let item of filteredItems">
     <ion-label>
+      <span>ID: {{ item.id }}</span>
       <h2>Nome: {{ item.name }}</h2>
       <p>Endereço: {{ item.address }}</p>
       <p>Status: {{ item.status }}</p>
     </ion-label>
-    
+
     <ion-button slot="end" fill="outline" [disabled]="item.status === 'entregue'" (click)="update(item)" color="dark">
       <ion-icon slot="icon-only" name="pencil-outline" color="dark"></ion-icon>
     </ion-button>
-    
+
     <ion-button slot="end" fill="outline" (click)="delete(item.id)" color="danger">
       <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
     </ion-button>
