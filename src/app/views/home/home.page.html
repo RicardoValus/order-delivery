@@ -1,44 +1,110 @@
-<ion-item>
-  <ion-input label="Nome:" [(ngModel)]="name"></ion-input>
-  <ion-input label="Endereço:" [(ngModel)]="address"></ion-input>
-  <ion-select label="Status:" [(ngModel)]="status">
-    <ion-select-option value="pendente">Pendente</ion-select-option>
-    <ion-select-option value="entregue">Entregue</ion-select-option>
-  </ion-select>
-  <ion-button (click)="create()" fill="outline" color="dark">
-    <ion-icon name="add-outline" slot="icon-only"></ion-icon>
-  </ion-button>
-</ion-item>
+<ion-content>
 
-<ion-item>
-  <ion-label>Filtrar por Status:</ion-label>
-  <ion-select [(ngModel)]="filterStatus" (ionChange)="filterItems()">
-    <ion-select-option value="todos">Todos</ion-select-option>
-    <ion-select-option value="pendente">Pendente</ion-select-option>
-    <ion-select-option value="entregue">Entregue</ion-select-option>
-  </ion-select>
-</ion-item>
+  <ion-list>
 
+    <div *ngIf="filteredItems.length === 0">
+      <h3 style="text-align: center; margin-top: 20px; font-size: 1rem;">
+        Não há itens para exibir...
+      </h3>
+    </div>
 
-<ion-list>
-  <ion-item *ngFor="let item of filteredItems">
-    <ion-label>
-      <span>ID: {{ item.id }}</span>
-      <h2>Nome: {{ item.name }}</h2>
-      <p>Endereço: {{ item.address }}</p>
-      <p>Status: {{ item.status }}</p>
-    </ion-label>
+    <ion-item *ngFor="let item of filteredItems">
+      <ion-label>
+        <h2>Nome: {{ item.name }}</h2>
+        <p>Endereço: {{ item.address }}</p>
+        <p>Status: {{ item.status }}</p>
+        <p>ID: {{ item.id }}</p>
+      </ion-label>
 
-    <ion-button slot="end" fill="outline" [disabled]="item.status === 'entregue'" (click)="update(item)" color="dark">
-      <ion-icon slot="icon-only" name="pencil-outline" color="dark"></ion-icon>
-    </ion-button>
+      <div style="display: flex; flex-direction: column;">
+        <ion-button slot="end" fill="clear" [disabled]="item.status === 'entregue'" (click)="update(item)" color="dark">
+          <ion-icon slot="icon-only" name="pencil-outline" color="dark"></ion-icon>
+        </ion-button>
 
-    <ion-button slot="end" fill="outline" (click)="delete(item.id)" color="danger">
-      <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
-    </ion-button>
+        <ion-button slot="end" fill="clear" (click)="delete(item.id)" color="danger">
+          <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
+        </ion-button>
 
-    <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="outline" (click)="conclude(item)" color="success">
-      <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
+        <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success">
+          <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
+        </ion-button>
+      </div>
+
+      <ion-modal id="example-modal" #modal trigger="open-custom-dialog">
+        <ng-template>
+          <div class="wrapper"
+            style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+            <h1 style="text-align: center;">Concluir Pedido</h1>
+
+            <ion-list class="photos-list" style="padding-bottom: 25%;">
+              <ion-item *ngFor="let file of images" color="secondary">
+                <ion-thumbnail slot="start">
+                  <ion-img [src]="file.data" style="border-radius: 10px;"></ion-img>
+                </ion-thumbnail>
+                <ion-label class="ion-text-wrap">
+                  {{ file.name }}
+                </ion-label>
+                <ion-button slot="end" fill="clear" (click)="deleteImage(file)" color="danger">
+                  <ion-icon name="trash" slot="icon-only" style="width: 32px;"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-list>
+
+            <ion-fab vertical="bottom" horizontal="center" slot="fixed" class="campicture">
+
+              <ion-fab-button *ngIf="images.length === 0" (click)="selectImage()">
+                <ion-icon name="camera" style="width: 70%; margin-left: 6px;"></ion-icon>
+              </ion-fab-button>
+
+              <ion-fab-button *ngIf="images.length > 0" (click)="completeOrder()">
+                <ion-icon name="checkmark" style="width: 70%; margin-left: 6px;"></ion-icon>
+              </ion-fab-button>
+
+            </ion-fab>
+          </div>
+        </ng-template>
+      </ion-modal>
+
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-item>
+    <ion-select label="Filtrar por Status:" [(ngModel)]="filterStatus" (ionChange)="filterItems()">
+      <ion-select-option value="todos">Todos</ion-select-option>
+      <ion-select-option value="pendente">Pendente</ion-select-option>
+      <ion-select-option value="entregue">Entregue</ion-select-option>
+    </ion-select>
+
+    <ion-button slot="end" fill="clear" (click)="toggleHeader()" color="dark">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
     </ion-button>
   </ion-item>
-</ion-list>
+
+  <!-- Inputs que podem ser ocultados -->
+  <ion-item *ngIf="showInputs">
+    <ion-input label="Nome:" [(ngModel)]="name"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="showInputs">
+    <ion-input label="Endereço:" [(ngModel)]="address"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="showInputs">
+    <ion-select label="Status:" [(ngModel)]="status">
+      <ion-select-option value="pendente">Pendente</ion-select-option>
+      <ion-select-option value="entregue">Entregue</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="showInputs">
+
+
+    <ion-fab-button (click)="create()" slot="end" style="margin-bottom: 1rem; margin-top: 1rem;">
+      <ion-icon name="add-outline" style="width: 70%; "></ion-icon>
+    </ion-fab-button>
+
+  </ion-item>
+</ion-footer>

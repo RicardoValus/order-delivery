@@ -1,6 +1,6 @@
 {
   "database": "items.db",
-  "version": 3,
+  "version": 4,
   "encrypted": false,
   "mode": "full",
   "tables": [
