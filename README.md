@@ -2,7 +2,11 @@
 
 - No terminal do projeto, utilizar npm install --legacy-peer-deps
 
-- Abrir o projeto no Android Studio com npx cap open android
+- Utilize ionic build
+
+- Utilize npx cap sync
+
+- Abrir o projeto no Android Studio com npx cap open android e conecte seu dispositivo no android studio via USB ou Wi-Fi
 
 - Então roda o app com npx cap run android
 
