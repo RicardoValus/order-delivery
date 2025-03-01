@@ -1,0 +1,15 @@
+:host {
+    >ion-content {
+        >ion-card {
+            >ion-card-content {
+                >div {
+                    >img {
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+    }
+}

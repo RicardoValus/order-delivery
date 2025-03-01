@@ -14,6 +14,7 @@ export class SqliteService {
   public isWeb: boolean
   public dbName: string
 
+
   constructor(
     private http: HttpClient
   ) {
@@ -73,7 +74,7 @@ export class SqliteService {
 
           this.dbReady.next(true);
         } else {
-          console.error('JSON invalido');
+          console.error('JSON inválido');
         }
       } catch (error) {
         console.error('erro ao processar o JSON:', error);
@@ -91,82 +92,5 @@ export class SqliteService {
       }
     }
     return this.dbName;
-  }
-
-  async create(name: string, address: string, status: string = "pendente") {
-    const createdAt = new Date().toISOString();
-    let sql = 'INSERT INTO items (name, address, status, created_at) VALUES (?, ?, ?, ?)';
-    const dbName = await this.getDbName();
-
-    return CapacitorSQLite.executeSet({
-      database: dbName,
-      set: [{ statement: sql, values: [name, address, status, createdAt] }]
-    }).then((changes: capSQLiteChanges) => {
-      if (this.isWeb) {
-        CapacitorSQLite.saveToStore({ database: dbName });
-      }
-      return changes;
-    }).catch(err => Promise.reject(err));
-  }
-
-  async read() {
-    let sql = 'SELECT * FROM items';
-    const dbName = await this.getDbName();
-    return CapacitorSQLite.query({
-      database: dbName,
-      statement: sql,
-      values: []
-    }).then((response: capSQLiteValues) => {
-      return response.values;
-    }).catch(err => Promise.reject(err));
-  }
-
-  async update(id: number, name: string, address: string, status: string, photo?: any) {
-    const validStatuses = ['entregue', 'pendente'];
-    if (!validStatuses.includes(status)) {
-      console.error('status invalido');
-    }
-
-    let sql = 'UPDATE items SET name=?, address=?, status=?, photo=? WHERE id=?';
-    const dbName = await this.getDbName();
-
-    return CapacitorSQLite.executeSet({
-      database: dbName,
-      set: [{ statement: sql, values: [name, address, status, photo, id] }]
-    }).then((changes: capSQLiteChanges) => {
-      if (this.isWeb) {
-        CapacitorSQLite.saveToStore({ database: dbName });
-      }
-      return changes;
-    }).catch(err => {
-      console.error("erro ao atualizar no banco:", err);
-      return Promise.reject(err);
-    });
-  }
-
-  async delete(id: number) {
-    let sql = 'DELETE FROM items WHERE id=?';
-    const dbName = await this.getDbName();
-    return CapacitorSQLite.executeSet({
-      database: dbName,
-      set: [{ statement: sql, values: [id] }]
-    }).then((changes: capSQLiteChanges) => {
-      if (this.isWeb) {
-        CapacitorSQLite.saveToStore({ database: dbName });
-      }
-      return changes;
-    }).catch(err => Promise.reject(err));
-  }
-
-  async getItemById(id: number) {
-    let sql = 'SELECT * FROM items WHERE id = ?';
-    const dbName = await this.getDbName();
-    return CapacitorSQLite.query({
-      database: dbName,
-      statement: sql,
-      values: [id]
-    }).then((response: capSQLiteValues) => {
-      return response.values.length > 0 ? response.values[0] : null;
-    }).catch(err => Promise.reject(err));
   }
 }

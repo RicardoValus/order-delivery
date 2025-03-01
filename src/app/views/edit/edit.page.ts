@@ -51,7 +51,6 @@ export class EditPage implements OnInit {
   }
 
   save() {
-    console.log("salvando item com id:", this.id);
 
     if (!this.id) {
       console.error("erro: id indefinido");
@@ -67,7 +66,6 @@ export class EditPage implements OnInit {
 
     this.sqlite.update(updatedItem.id, updatedItem.name, updatedItem.address, updatedItem.status)
       .then((changes) => {
-        console.log("atualizado: ", changes);
         this.router.navigate(['/']);
       })
       .catch(err => {

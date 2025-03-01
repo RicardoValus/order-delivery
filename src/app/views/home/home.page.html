@@ -1,4 +1,4 @@
-<ion-header style="text-align: center;">
+<ion-header>
   <ion-toolbar color="light">
     <ion-title>
       Order Delivery
@@ -12,12 +12,12 @@
   <ion-list>
 
     <div *ngIf="filteredItems.length === 0">
-      <h3 style="text-align: center; margin-top: 20px; font-size: 1rem;">
+      <h3>
         Não há itens para exibir...
       </h3>
     </div>
 
-    <ion-item *ngFor="let item of filteredItems" style="margin-bottom: 1rem;">
+    <ion-item *ngFor="let item of filteredItems">
 
       <ion-button slot="start" fill="clear" color="dark" (click)="viewDetails(item)">
         <ion-icon slot="icon-only" name="eye" color="dark"></ion-icon>
@@ -30,7 +30,7 @@
         <p>ID: {{ item.id }}</p>
       </ion-label>
 
-      <div style="display: flex; flex-direction: column;">
+      <div>
         <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success"
           (click)="setSelectedItem(item)">
           <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
@@ -47,20 +47,19 @@
 
       <ion-modal id="example-modal" #modal trigger="open-custom-dialog">
         <ng-template>
-          <div class="wrapper"
-            style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-            <h1 style="text-align: center;">Concluir Pedido</h1>
+          <div class="wrapper">
+            <h1>Concluir Pedido</h1>
 
-            <ion-list class="photos-list" style="padding-bottom: 25%;">
+            <ion-list class="photos-list">
               <ion-item *ngFor="let file of images" color="dark">
                 <ion-thumbnail slot="start">
-                  <ion-img [src]="file.data" style="border-radius: 10px;"></ion-img>
+                  <ion-img [src]="file.data"></ion-img>
                 </ion-thumbnail>
                 <ion-label class="ion-text-wrap">
                   {{ file.name }}
                 </ion-label>
                 <ion-button slot="end" fill="clear" (click)="deleteImage(file)" color="danger">
-                  <ion-icon name="trash" slot="icon-only" style="width: 32px;" color="danger"></ion-icon>
+                  <ion-icon name="trash" slot="icon-only" color="danger"></ion-icon>
                 </ion-button>
               </ion-item>
             </ion-list>
@@ -68,11 +67,11 @@
             <ion-fab vertical="bottom" horizontal="center" slot="fixed" class="campicture">
 
               <ion-fab-button *ngIf="images.length === 0" (click)="takePhoto()">
-                <ion-icon name="camera" style="width: 70%; margin-left: 6px;"></ion-icon>
+                <ion-icon name="camera"></ion-icon>
               </ion-fab-button>
 
               <ion-fab-button *ngIf="images.length > 0" (click)="completeOrder()">
-                <ion-icon name="checkmark" style="width: 70%; margin-left: 6px;" color="success"></ion-icon>
+                <ion-icon name="checkmark" color="success"></ion-icon>
               </ion-fab-button>
 
             </ion-fab>
@@ -114,11 +113,10 @@
     </ion-select>
   </ion-item>
 
-  <ion-item *ngIf="showInputs">
+  <ion-item class="add" *ngIf="showInputs">
 
-
-    <ion-fab-button (click)="create()" slot="end" style="margin-bottom: 1rem; margin-top: 1rem;">
-      <ion-icon name="add-outline" style="width: 70%; "></ion-icon>
+    <ion-fab-button (click)="create()" slot="end">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
 
   </ion-item>

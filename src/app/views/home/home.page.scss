@@ -3,6 +3,10 @@
 }
 
 :host {
+  >ion-header {
+    text-align: center;
+  }
+
   >ion-content {
     height: 100%;
     overflow-y: scroll;
@@ -15,10 +19,36 @@
         justify-content: center;
         align-items: center;
         height: 50%;
+
+        >h3 {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 1rem;
+        }
+      }
+
+      >ion-item {
+        margin-bottom: 1rem;
+
+        >div {
+          display: flex;
+          flex-direction: column;
+        }
       }
     }
+  }
 
+  >ion-footer {
+    >ion-item.add {
+      >ion-fab-button {
+        margin-bottom: 1rem;
+        margin-top: 1rem;
 
+        >ion-icon {
+          width: 70%;
+        }
+      }
+    }
   }
 }
 
@@ -47,4 +77,42 @@ ion-modal#example-modal ion-icon {
 
 ion-modal#example-modal .wrapper {
   margin-bottom: 10px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  >h1 {
+    text-align: center;
+  }
+
+  >ion-list {
+    padding-bottom: 25%;
+
+    >ion-item {
+      >ion-thumbnail {
+        >ion-img {
+          border-radius: 10px;
+        }
+      }
+
+      >ion-button {
+        >ion-icon {
+          width: 32px;
+        }
+      }
+    }
+  }
+
+  >ion-fab {
+    >ion-fab-button {
+      >ion-icon {
+        width: 70%;
+        margin-left: 6px;
+      }
+    }
+  }
 }

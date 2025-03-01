@@ -77,26 +77,15 @@ export class HomePage {
       return;
     }
 
-    // Verificar se o nome já existe
-    const itemExists = this.items.some(item => item.name.toLowerCase() === this.name.toLowerCase());
-
-    if (itemExists) {
-      this.showAlert('Já existe um pedido com esse nome.');
-      return;
-    }
-
     this.sqlite.create(this.name, this.address, this.status).then(() => {
       this.name = "";
       this.address = "";
       this.status = "pendente";
-      this.read(); // Atualiza a lista de itens após a criação
+      this.read();
 
-      // Exibe o toast de sucesso
       this.isToastOpenCreate = true;
     }).catch(err => console.error("erro ao criar:", err));
   }
-
-
 
   async showAlert(message: string) {
     const alert = await this.alertCtrl.create({
@@ -120,7 +109,6 @@ export class HomePage {
           text: 'Cancelar',
           role: 'cancel',
           handler: () => {
-            console.log('Exclusão cancelada');
           }
         },
         {
@@ -128,9 +116,9 @@ export class HomePage {
           role: 'destructive',
           handler: () => {
             this.sqlite.delete(id).then(() => {
-              this.read(); // Atualiza a lista de itens
-              this.isToastOpen = true; // Exibe o toast após exclusão
-            }).catch(err => console.error("Erro ao apagar:", err));
+              this.read();
+              this.isToastOpen = true;
+            }).catch(err => console.error("erro ao apagar:", err));
           }
         }
       ]
@@ -155,7 +143,6 @@ export class HomePage {
     item.status = 'entregue';
 
     this.sqlite.update(item.id, item.name, item.address, item.status, item.photo).then(() => {
-      console.log("pedido concluído:", item);
       this.read();
     }).catch(err => console.error("erro ao concluir pedido:", err));
 
@@ -184,10 +171,9 @@ export class HomePage {
           data: base64Data
         });
 
-        console.log('Imagens no array:', this.images);
       }
     } catch (error) {
-      console.error('Erro ao tirar foto:', error);
+      console.error('erro ao tirar foto:', error);
     }
   }
 
@@ -203,58 +189,49 @@ export class HomePage {
 
   async deleteImage(file: LocalFile) {
     this.images = this.images.filter(img => img !== file);
-    console.log('Imagens após deletar:', this.images);
   }
 
   setSelectedItem(item: Item) {
     this.selectedItem = item;
-    console.log("Item selecionado:", this.selectedItem);
   }
 
 
   async completeOrder() {
     if (!this.selectedItem) {
-      console.log("Erro: Nenhum item selecionado.");
       return;
     }
 
     const validStatuses = ['entregue', 'pendente'];
     if (!validStatuses.includes(this.selectedItem.status)) {
-      console.log("Erro: Status inválido.");
       return;
     }
 
     if (this.images.length === 0) {
-      console.log("Tire uma foto antes de finalizar!");
       return;
     }
 
     try {
       const lastImage = this.images[this.images.length - 1];
 
-      // Atualiza o pedido com a foto e status 'entregue'
       await this.sqlite.update(
         this.selectedItem.id,
         this.selectedItem.name,
         this.selectedItem.address,
-        'entregue',  // Aqui o status está sendo diretamente passado como 'entregue'
-        lastImage.data // A foto do último item no array
+        'entregue',
+        lastImage.data
       );
 
-      console.log("Pedido concluído com foto salva!");
 
       this.images = [];
-      this.selectedItem.status = 'entregue';  // Confirme que o status está correto aqui
+      this.selectedItem.status = 'entregue';
 
-      // Atualiza o item na lista
       this.read();
 
       this.selectedItem = null;
 
       await this.modalCtrl.dismiss();
     } catch (error) {
-      console.error("Erro ao salvar a foto:", error);
-      console.log("Erro ao salvar a foto no banco.");
+      console.error("erro ao salvar a foto:", error);
     }
   }
 

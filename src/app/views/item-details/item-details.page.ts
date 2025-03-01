@@ -30,7 +30,7 @@ export class ItemDetailsPage implements OnInit {
   loadItemDetails() {
     this.sqlite.getItemById(this.itemId).then(item => {
       this.item = item;
-    }).catch(err => console.error('Erro ao carregar item:', err));
+    }).catch(err => console.error('erro ao carregar item:', err));
   }
 
   back() {

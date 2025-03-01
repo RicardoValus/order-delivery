@@ -19,7 +19,7 @@
       <p><strong>Data de Criação:</strong> {{ item.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
 
       <div *ngIf="item.photo">
-        <img [src]="item.photo" alt="Foto do item" style="width: 100px; height: 100px; border-radius: 10px;">
+        <img [src]="item.photo" alt="Foto do item">
       </div>
 
     </ion-card-content>
