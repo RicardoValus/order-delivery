@@ -25,7 +25,7 @@
           <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
         </ion-button>
 
-        <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success">
+        <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success" (click)="setSelectedItem(item)">
           <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
         </ion-button>
       </div>
@@ -45,19 +45,19 @@
                   {{ file.name }}
                 </ion-label>
                 <ion-button slot="end" fill="clear" (click)="deleteImage(file)" color="danger">
-                  <ion-icon name="trash" slot="icon-only" style="width: 32px;"></ion-icon>
+                  <ion-icon name="trash" slot="icon-only" style="width: 32px;" color="danger"></ion-icon>
                 </ion-button>
               </ion-item>
             </ion-list>
 
             <ion-fab vertical="bottom" horizontal="center" slot="fixed" class="campicture">
 
-              <ion-fab-button *ngIf="images.length === 0" (click)="selectImage()">
+              <ion-fab-button *ngIf="images.length === 0" (click)="takePhoto()">
                 <ion-icon name="camera" style="width: 70%; margin-left: 6px;"></ion-icon>
               </ion-fab-button>
 
               <ion-fab-button *ngIf="images.length > 0" (click)="completeOrder()">
-                <ion-icon name="checkmark" style="width: 70%; margin-left: 6px;"></ion-icon>
+                <ion-icon name="checkmark" style="width: 70%; margin-left: 6px;" color="success"></ion-icon>
               </ion-fab-button>
 
             </ion-fab>

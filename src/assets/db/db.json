@@ -1,6 +1,6 @@
 {
   "database": "items.db",
-  "version": 4,
+  "version": 6,
   "encrypted": false,
   "mode": "full",
   "tables": [
@@ -22,6 +22,10 @@
         {
           "column": "status",
           "value": "TEXT CHECK(status IN ('entregue', 'pendente')) DEFAULT 'pendente'"
+        },
+        {
+          "column": "photo",
+          "value": "TEXT"
         }
       ]
     }

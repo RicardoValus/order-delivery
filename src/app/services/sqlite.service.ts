@@ -94,12 +94,12 @@ export class SqliteService {
     return this.dbName;
   }
 
-  async create(name: string, address: string, status: string = "pendente") {
-    let sql = 'INSERT INTO items (name, address, status) VALUES (?, ?, ?)';
+  async create(name: string, address: string, photo: string, status: string = "pendente") {
+    let sql = 'INSERT INTO items (name, address, photo, status) VALUES (?, ?, ?, ?)';
     const dbName = await this.getDbName();
     return CapacitorSQLite.executeSet({
       database: dbName,
-      set: [{ statement: sql, values: [name, address, status] }]
+      set: [{ statement: sql, values: [name, address, photo, status] }]
     }).then((changes: capSQLiteChanges) => {
       if (this.isWeb) {
         CapacitorSQLite.saveToStore({ database: dbName });
