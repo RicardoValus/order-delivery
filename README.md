@@ -5,3 +5,6 @@
 - Abrir o projeto no Android Studio com npx cap open android
 
 - Então roda o app com npx cap run android
+
+Teste:
+- Para rodar os testes unitários, utilizar ng test
