@@ -12,3 +12,5 @@
 
 Teste:
 - Para rodar os testes unitários, utilizar ng test
+
+Outra possível tentativa, seria baixar o arquivo APK do projeto (app-debug.apk) e executa-lo no dispositivo
