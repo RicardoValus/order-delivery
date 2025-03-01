@@ -1,6 +1,6 @@
 {
   "database": "items.db",
-  "version": 6,
+  "version": 7,
   "encrypted": false,
   "mode": "full",
   "tables": [
@@ -25,6 +25,10 @@
         },
         {
           "column": "photo",
+          "value": "TEXT"
+        },
+        {
+          "column": "created_at",
           "value": "TEXT"
         }
       ]

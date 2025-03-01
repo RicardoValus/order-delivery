@@ -19,6 +19,14 @@ const routes: Routes = [
     path: 'edit/:id',
     loadChildren: () => import('./views/edit/edit.module').then(m => m.EditPageModule)
   },
+  {
+    path: 'item-details',
+    loadChildren: () => import('./views/item-details/item-details.module').then(m => m.ItemDetailsPageModule)
+  },
+  {
+    path: 'item-details/:id',
+    loadChildren: () => import('./views/item-details/item-details.module').then(m => m.ItemDetailsPageModule)
+  }
 ];
 
 @NgModule({

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SqliteService } from 'src/app/services/sqlite.service';
@@ -25,7 +26,8 @@ export class EditPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private sqlite: SqliteService
+    private sqlite: SqliteService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -71,5 +73,9 @@ export class EditPage implements OnInit {
       .catch(err => {
         console.error("erro ao atualizar: ", err);
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

@@ -9,9 +9,8 @@ interface Item {
   name: string;
   address: string;
   status: string;
+  photo?: string;
 }
-
-const IMAGE_DIR = 'stored-images';
 
 interface LocalFile {
   name: string;
@@ -37,6 +36,8 @@ export class HomePage {
   showInputs: boolean = true;
   images: LocalFile[] = [];
   selectedItem: Item | null = null;
+  public isToastOpen = false;
+  public isToastOpenCreate = false;
 
   constructor(
     private sqlite: SqliteService,
@@ -71,12 +72,39 @@ export class HomePage {
   }
 
   create() {
+    if (!this.name || !this.address || !this.status) {
+      this.showAlert('Todos os campos precisam ser preenchidos.');
+      return;
+    }
+
+    // Verificar se o nome já existe
+    const itemExists = this.items.some(item => item.name.toLowerCase() === this.name.toLowerCase());
+
+    if (itemExists) {
+      this.showAlert('Já existe um pedido com esse nome.');
+      return;
+    }
+
     this.sqlite.create(this.name, this.address, this.status).then(() => {
       this.name = "";
       this.address = "";
       this.status = "pendente";
-      this.read();
+      this.read(); // Atualiza a lista de itens após a criação
+
+      // Exibe o toast de sucesso
+      this.isToastOpenCreate = true;
     }).catch(err => console.error("erro ao criar:", err));
+  }
+
+
+
+  async showAlert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Erro',
+      message: message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   update(item: Item) {
@@ -100,7 +128,8 @@ export class HomePage {
           role: 'destructive',
           handler: () => {
             this.sqlite.delete(id).then(() => {
-              this.read();
+              this.read(); // Atualiza a lista de itens
+              this.isToastOpen = true; // Exibe o toast após exclusão
             }).catch(err => console.error("Erro ao apagar:", err));
           }
         }
@@ -110,11 +139,22 @@ export class HomePage {
     await alert.present();
   }
 
+  handleToastDismiss(type: string) {
+    if (type === 'create') {
+      this.isToastOpenCreate = false;
+    }
+    if (type === 'delete') {
+      this.isToastOpen = false;
+    }
+  }
+
+
+
 
   conclude(item: Item) {
     item.status = 'entregue';
 
-    this.sqlite.update(item.id, item.name, item.address, item.status).then(() => {
+    this.sqlite.update(item.id, item.name, item.address, item.status, item.photo).then(() => {
       console.log("pedido concluído:", item);
       this.read();
     }).catch(err => console.error("erro ao concluir pedido:", err));
@@ -174,7 +214,13 @@ export class HomePage {
 
   async completeOrder() {
     if (!this.selectedItem) {
-      console.log("Erro: Nenhum item selecionado!");
+      console.log("Erro: Nenhum item selecionado.");
+      return;
+    }
+
+    const validStatuses = ['entregue', 'pendente'];
+    if (!validStatuses.includes(this.selectedItem.status)) {
+      console.log("Erro: Status inválido.");
       return;
     }
 
@@ -186,31 +232,26 @@ export class HomePage {
     try {
       const lastImage = this.images[this.images.length - 1];
 
-      await this.sqlite.create(
-        this.selectedItem.name,
-        this.selectedItem.address,
-        lastImage.data,
-        'entregue'
-      );
-
-      console.log("Pedido concluído com foto salva!");
-      this.images = [];
-
-      this.selectedItem.status = "entregue";
+      // Atualiza o pedido com a foto e status 'entregue'
       await this.sqlite.update(
         this.selectedItem.id,
         this.selectedItem.name,
         this.selectedItem.address,
-        this.selectedItem.status
+        'entregue',  // Aqui o status está sendo diretamente passado como 'entregue'
+        lastImage.data // A foto do último item no array
       );
 
-      console.log("Pedido concluído:", this.selectedItem);
+      console.log("Pedido concluído com foto salva!");
+
+      this.images = [];
+      this.selectedItem.status = 'entregue';  // Confirme que o status está correto aqui
+
+      // Atualiza o item na lista
       this.read();
 
       this.selectedItem = null;
 
       await this.modalCtrl.dismiss();
-
     } catch (error) {
       console.error("Erro ao salvar a foto:", error);
       console.log("Erro ao salvar a foto no banco.");
@@ -221,5 +262,8 @@ export class HomePage {
     this.showInputs = !this.showInputs;
   }
 
+  viewDetails(item: Item) {
+    this.router.navigate(['/item-details', item.id]);
+  }
 }
 

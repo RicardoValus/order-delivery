@@ -1,3 +1,12 @@
+<ion-header style="text-align: center;">
+  <ion-toolbar color="light">
+    <ion-title>
+      Order Delivery
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
 <ion-content>
 
   <ion-list>
@@ -8,7 +17,12 @@
       </h3>
     </div>
 
-    <ion-item *ngFor="let item of filteredItems">
+    <ion-item *ngFor="let item of filteredItems" style="margin-bottom: 1rem;">
+
+      <ion-button slot="start" fill="clear" color="dark" (click)="viewDetails(item)">
+        <ion-icon slot="icon-only" name="eye" color="dark"></ion-icon>
+      </ion-button>
+
       <ion-label>
         <h2>Nome: {{ item.name }}</h2>
         <p>Endereço: {{ item.address }}</p>
@@ -17,16 +31,17 @@
       </ion-label>
 
       <div style="display: flex; flex-direction: column;">
-        <ion-button slot="end" fill="clear" [disabled]="item.status === 'entregue'" (click)="update(item)" color="dark">
+        <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success"
+          (click)="setSelectedItem(item)">
+          <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
+        </ion-button>
+
+        <ion-button slot="end" fill="clear" *ngIf="item.status === 'pendente'" (click)="update(item)" color="dark">
           <ion-icon slot="icon-only" name="pencil-outline" color="dark"></ion-icon>
         </ion-button>
 
         <ion-button slot="end" fill="clear" (click)="delete(item.id)" color="danger">
           <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
-        </ion-button>
-
-        <ion-button *ngIf="item.status === 'pendente'" slot="end" fill="clear" id="open-custom-dialog" color="success" (click)="setSelectedItem(item)">
-          <ion-icon slot="icon-only" name="checkmark-outline" color="success"></ion-icon>
         </ion-button>
       </div>
 
@@ -37,7 +52,7 @@
             <h1 style="text-align: center;">Concluir Pedido</h1>
 
             <ion-list class="photos-list" style="padding-bottom: 25%;">
-              <ion-item *ngFor="let file of images" color="secondary">
+              <ion-item *ngFor="let file of images" color="dark">
                 <ion-thumbnail slot="start">
                   <ion-img [src]="file.data" style="border-radius: 10px;"></ion-img>
                 </ion-thumbnail>
@@ -71,7 +86,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-item>
+  <ion-item color="light">
     <ion-select label="Filtrar por Status:" [(ngModel)]="filterStatus" (ionChange)="filterItems()">
       <ion-select-option value="todos">Todos</ion-select-option>
       <ion-select-option value="pendente">Pendente</ion-select-option>
@@ -107,4 +122,12 @@
     </ion-fab-button>
 
   </ion-item>
+
+  <ion-toast [isOpen]="isToastOpen" message="Pedido Removido com Sucesso!" [duration]="3000"
+    (didDismiss)="handleToastDismiss('delete')"></ion-toast>
+
+  <ion-toast [isOpen]="isToastOpenCreate" message="Pedido Criado com Sucesso!" [duration]="3000"
+    (didDismiss)="handleToastDismiss('create')"></ion-toast>
+
+
 </ion-footer>

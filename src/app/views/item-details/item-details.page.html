@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-button slot="start" fill="clear" color="dark" (click)="back()">
+      <ion-icon slot="icon-only" name="arrow-back" color="black"></ion-icon>
+    </ion-button>
+    <ion-title>Detalhes do Pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="item">
+    <ion-card-header>
+      <ion-card-title>{{ item.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Endereço:</strong> {{ item.address }}</p>
+      <p><strong>Status:</strong> {{ item.status }}</p>
+      <p><strong>ID:</strong> {{ item.id }}</p>
+      <p><strong>Data de Criação:</strong> {{ item.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+
+      <div *ngIf="item.photo">
+        <img [src]="item.photo" alt="Foto do item" style="width: 100px; height: 100px; border-radius: 10px;">
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -94,12 +94,14 @@ export class SqliteService {
     return this.dbName;
   }
 
-  async create(name: string, address: string, photo: string, status: string = "pendente") {
-    let sql = 'INSERT INTO items (name, address, photo, status) VALUES (?, ?, ?, ?)';
+  async create(name: string, address: string, status: string = "pendente") {
+    const createdAt = new Date().toISOString(); 
+    let sql = 'INSERT INTO items (name, address, status, created_at) VALUES (?, ?, ?, ?)';
     const dbName = await this.getDbName();
+
     return CapacitorSQLite.executeSet({
       database: dbName,
-      set: [{ statement: sql, values: [name, address, photo, status] }]
+      set: [{ statement: sql, values: [name, address, status, createdAt] }]
     }).then((changes: capSQLiteChanges) => {
       if (this.isWeb) {
         CapacitorSQLite.saveToStore({ database: dbName });
@@ -120,14 +122,19 @@ export class SqliteService {
     }).catch(err => Promise.reject(err));
   }
 
-  async update(id: number, name: string, address: string, status: string) {
-    let sql = 'UPDATE items SET name=?, address=?, status=? WHERE id=?';
+  async update(id: number, name: string, address: string, status: string, photo?: any) {
+    const validStatuses = ['entregue', 'pendente'];
+    if (!validStatuses.includes(status)) {
+      console.error('Status inválido');
+    }
+
+    let sql = 'UPDATE items SET name=?, address=?, status=?, photo=? WHERE id=?';
     const dbName = await this.getDbName();
-    console.log("executando SQL:", sql, "com valores:", [name, address, status, id]);
+    console.log("executando SQL:", sql, "com valores:", [name, address, status, photo, id]);
 
     return CapacitorSQLite.executeSet({
       database: dbName,
-      set: [{ statement: sql, values: [name, address, status, id] }]
+      set: [{ statement: sql, values: [name, address, status, photo, id] }]
     }).then((changes: capSQLiteChanges) => {
       console.log("mudanças no banco:", changes);
       if (this.isWeb) {

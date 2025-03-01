@@ -1,10 +1,13 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>Editar Item</ion-title>
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-button slot="start" fill="clear" color="dark" (click)="back()">
+      <ion-icon slot="icon-only" name="arrow-back" color="black"></ion-icon>
+    </ion-button>
+    <ion-title>Editar Pedido</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-item>
     <ion-label position="stacked">Nome</ion-label>
     <ion-input [(ngModel)]="name"></ion-input>
@@ -22,6 +25,10 @@
       <ion-select-option value="entregue">Entregue</ion-select-option>
     </ion-select>
   </ion-item>
-
-  <ion-button expand="full" (click)="save()">Salvar</ion-button>
 </ion-content>
+
+<ion-footer style="position: relative; bottom: 0;">
+  <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 2rem;">
+    <ion-button expand="block" (click)="save()" style="width: 50%;">Salvar</ion-button>
+  </div>
+</ion-footer>
